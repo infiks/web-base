@@ -11,9 +11,13 @@ RUN mkdir /public /private \
  && sed -i "s|/var/www/|/public/|g" /etc/apache2/apache2.conf \
  && sed -i "s|/var/www/html|/public|g" /etc/apache2/sites-available/*.conf \
 # Disable directory listing
- && sed -i "s|Options Indexes FollowSymLinks|Options FollowSymLinks|g" /etc/apache2/apache2.conf \
+ && sed -i "\|Directory /public/|,\|Directory| s| Indexes||" /etc/apache2/apache2.conf \
+# Enable .htaccess files
+ && sed -i "\|Directory /public/|,\|Directory| s|AllowOverride None|AllowOverride All|" /etc/apache2/apache2.conf \
 # Change port
  && sed -i "s|80|$\{PORT\}|" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
+
+WORKDIR /public
 
 # Use the default production configuration
 RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
