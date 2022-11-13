@@ -8,7 +8,7 @@ RUN a2enmod rewrite headers && a2dismod --force autoindex
 RUN mkdir /public /private \
  && chmod 0777 /public /private \
  && chown www-data:www-data /public /private \
- && sed -i "s|80|$\{PORT\}|" /etc/apache2/ports.conf
+ && sed -i "s|80|$\{PORT\}\nServerName localhost|" /etc/apache2/ports.conf
 
 WORKDIR /public
 
@@ -25,4 +25,4 @@ COPY default.conf /etc/apache2/sites-available/000-default.conf
 
 # Enable health checks
 COPY CHECKS ./
-RUN echo Healthy > /var/www/html/healthy && chown www-data:www-data /var/www/html/healthy
+RUN echo Healthy > /var/www/healthy && chown www-data:www-data /var/www/healthy
