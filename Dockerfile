@@ -8,14 +8,7 @@ RUN a2enmod rewrite headers && a2dismod --force autoindex
 RUN mkdir /public /private \
  && chmod 0777 /public /private \
  && chown www-data:www-data /public /private \
- && sed -i "s|/var/www/|/public/|g" /etc/apache2/apache2.conf \
- && sed -i "s|/var/www/html|/public|g" /etc/apache2/sites-available/*.conf \
-# Disable directory listing
- && sed -i "\|Directory /public/|,\|Directory| s| Indexes||" /etc/apache2/apache2.conf \
-# Enable .htaccess files
- && sed -i "\|Directory /public/|,\|Directory| s|AllowOverride None|AllowOverride All|" /etc/apache2/apache2.conf \
-# Change port
- && sed -i "s|80|$\{PORT\}|" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
+ && sed -i "s|80|$\{PORT\}|" /etc/apache2/ports.conf
 
 WORKDIR /public
 
@@ -26,3 +19,10 @@ RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 RUN sed -i "s/^ServerTokens OS/ServerTokens Prod/g" /etc/apache2/conf-available/security.conf \
  && sed -i "s/^ServerSignature On//g" /etc/apache2/conf-available/security.conf \
  && sed -i "s/^expose_php = On/expose_php = Off/g" $PHP_INI_DIR/php.ini
+
+# Copy virtual host configuration
+COPY default.conf /etc/apache2/sites-available/000-default.conf
+
+# Enable health checks
+COPY CHECKS ./
+RUN echo Healthy > /var/www/html/healthy && chown www-data:www-data /var/www/html/healthy
