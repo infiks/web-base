@@ -26,3 +26,6 @@ COPY default.conf /etc/apache2/sites-available/000-default.conf
 # Enable health checks
 COPY CHECKS ./
 RUN echo Healthy > /var/www/healthy && chown www-data:www-data /var/www/healthy
+
+# Run as normal user
+User www-data
