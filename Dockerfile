@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:8.5-apache
 ENV PORT=80
 
 # Enable Apache modules
@@ -28,4 +28,4 @@ COPY CHECKS ./
 RUN echo Healthy > /var/www/healthy && chown www-data:www-data /var/www/healthy
 
 # Run as normal user
-User www-data
+USER www-data
