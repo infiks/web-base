@@ -1,6 +1,11 @@
 FROM php:8.5-apache
 ENV PORT=80
 
+# Upgrade to latest version of Apache
+RUN apt-get update; \
+ apt-get install -y --no-install-recommends apache2; \
+ apt-get dist-clean;
+
 # Enable Apache modules
 RUN a2enmod rewrite headers && a2dismod --force autoindex
 

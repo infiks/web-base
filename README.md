@@ -5,8 +5,15 @@ Base image for PHP websites.
 The `PORT` environment variable can be used to set the HTTP port.
 The documument root is located at `/public`.
 
-## Usage
+## Building the docker image
 
+Run the following command to build the docker image.
+
+```bash
+$ docker build -t docker.io/infiks/web-base .
+```
+
+## Usage
 
 ```Dockerfile
 FROM docker.io/infiks/web-base:latest
